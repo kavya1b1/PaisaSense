@@ -43,6 +43,7 @@ Upload your bank statement (CSV or PDF) and get **instant spending insights, beh
 
 ## 🗂️ Project Structure
 
+```text
 paisasense/
 ├── app.py
 ├── categorizer.py
@@ -62,7 +63,7 @@ paisasense/
         └── dashboard.js
 
 ---
-
+```
 ## ⚙️ Setup
 
 ```bash
