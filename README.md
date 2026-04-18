@@ -34,6 +34,11 @@ Upload your bank statement (CSV or PDF) and get **instant spending insights, beh
 - Get spoken AI responses  
 
 ---
+## Screenshots
+<img width="1470" height="956" alt="Screenshot 2026-04-19 at 12 57 26 am" src="https://github.com/user-attachments/assets/345e55e6-4fab-4caf-8ddb-ed14848f4280" />
+<img width="1470" height="956" alt="Screenshot 2026-04-19 at 12 57 23 am" src="https://github.com/user-attachments/assets/218dca7e-8d41-4625-a51e-f0ab7d49cfa9" />
+<img width="1470" height="956" alt="Screenshot 2026-04-19 at 12 57 17 am" src="https://github.com/user-attachments/assets/cd097a44-a58b-4c60-8644-eeb81ab3cf33" />
+
 
 ## 🗂️ Project Structure
 
