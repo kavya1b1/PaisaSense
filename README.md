@@ -43,10 +43,8 @@ Upload your bank statement (CSV or PDF) and get **instant spending insights, beh
 
 ## 🗂️ Project Structure
 
-paisasense/
-
+📁 paisasense/
 ├── app.py
-|
 ├── categorizer.py
 ├── parser.py
 ├── analyzer.py
@@ -59,8 +57,12 @@ paisasense/
 │
 └── static/
     ├── css/
+    │   ├── index.css
+    │   └── dashboard.css
+    │
     └── js/
-
+        ├── index.js
+        └── dashboard.js
 
 ---
 
