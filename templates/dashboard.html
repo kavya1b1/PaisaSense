@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PaisaSense AI — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">PaisaSense AI</div>
+  <div class="nav-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="langEn"   onclick="setLang('en')">EN</button>
+      <button class="lang-btn"        id="langHi"   onclick="setLang('hi')">हिं</button>
+      <button class="lang-btn"        id="langHiEn" onclick="setLang('hi-en')">HiEN</button>
+    </div>
+    <button class="nav-btn" onclick="window.location='/'">← New Analysis</button>
+  </div>
+</nav>
+
+<main class="main" id="mainContent">
+
+  <!-- Empty state (shown when no data in sessionStorage) -->
+  <div class="empty-state" id="emptyState">
+    <div class="icon">📊</div>
+    <h3>No data loaded</h3>
+    <p>Go back and upload a CSV/PDF or use demo data</p>
+    <a href="/" style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:var(--accent-g);color:#fff;border-radius:10px;text-decoration:none;font-weight:600;font-size:.9rem;">
+      ← Upload Now
+    </a>
+  </div>
+
+  <!-- Dashboard content (revealed by JS after data is loaded) -->
+  <div id="dashContent" style="display:none;">
+
+    <!-- Risk Alert Banner -->
+    <div class="risk-alert-banner" id="riskAlertBanner">
+      <span class="risk-icon">🚨</span>
+      <span id="riskAlertText"></span>
+    </div>
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div>
+        <h1 id="dashTitle">Your Financial Dashboard</h1>
+        <p id="dashSub">Here's what your transactions reveal about your spending behavior.</p>
+      </div>
+      <span class="date-badge" id="dateBadge">—</span>
+    </div>
+
+    <div id="highlightBox"></div>
+
+    <!-- Summary Cards -->
+    <div class="summary-grid" id="summaryGrid"></div>
+
+    <!-- Charts Row: Donut + Behavior Patterns -->
+    <div class="grid-3">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Category Breakdown</div>
+            <div class="panel-sub">Where your money goes</div>
+          </div>
+        </div>
+        <div class="panel-body" style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;">
+          <div class="chart-wrap" style="width:180px;height:180px;flex-shrink:0;">
+            <canvas id="donutChart"></canvas>
+            <div class="donut-center">
+              <div class="amount" id="donutTotal">—</div>
+              <div class="label">Total</div>
+            </div>
+          </div>
+          <div class="cat-list" id="catList" style="flex:1;min-width:160px;"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Behavior Patterns</div>
+            <div class="panel-sub">Key spending signals</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="behavior-grid" id="behaviorGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trend + Decisions Row -->
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Daily Spend Trend</div>
+            <div class="panel-sub">Transaction amounts over time</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="trend-wrap"><canvas id="trendChart"></canvas></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">💡 Actionable Decisions</div>
+            <div class="panel-sub">Recommendations based on your data</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="decisions-list" id="decisionsList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subscriptions -->
+    <div class="panel panel-row">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">📺 Recurring Payments</div>
+          <div class="panel-sub">Detected subscription-like charges</div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div id="subscriptionBox"></div>
+      </div>
+    </div>
+
+    <!-- Budget vs Actual -->
+    <div class="panel panel-row">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">📊 Budget vs Actual</div>
+          <div class="panel-sub">How your spending compares to the 50/30/20 ideal</div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div id="budgetBox"></div>
+      </div>
+    </div>
+
+    <!-- Voice Input Section -->
+    <div class="voice-input-section" id="voiceInputSection" style="display:none;">
+      <div class="voice-input-inner">
+        <div class="voice-input-left">
+          <div class="voice-input-title">🎤 Ask in your language</div>
+          <div class="voice-input-sub">Speak your question — AI will answer in the same language</div>
+        </div>
+        <div class="voice-input-right">
+          <button class="btn-voice-big" id="startVoiceBtn" onclick="startVoiceQuery()">
+            <span class="mic-icon">🎤</span>
+            <span id="voiceBtnLabel">Start Speaking</span>
+          </button>
+          <div class="listening-indicator" id="listeningIndicator" style="display:none;">
+            <span class="pulse-dot"></span> Listening...
+          </div>
+        </div>
+      </div>
+      <div id="voiceQueryBox" style="display:none;">
+        <div class="voice-response-wrap" id="voiceQueryResult"></div>
+      </div>
+    </div>
+
+    <!-- AI Analysis -->
+    <div class="ai-panel">
+      <div class="ai-head">
+        <div class="ai-head-left">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;">
+              <span class="ai-title" id="aiTitle">AI Financial Analysis</span>
+              <span class="ai-badge" id="aiSourceBadge">GEMINI AI</span>
+            </div>
+            <div class="ai-sub" id="aiSub">Personalized insights generated by AI</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <button class="btn btn-ghost" id="micBtn"       onclick="startVoiceQuery()" title="Ask a question by voice" style="display:none;">🎤 Ask</button>
+          <button class="btn btn-ghost" id="voiceBtn"     onclick="toggleVoice()"                                      style="display:none;">🔊 Play</button>
+          <button class="btn btn-ghost" id="stopVoiceBtn" onclick="stopVoice()">⏹ Stop</button>
+          <button class="btn btn-ghost" id="aiBtn"        onclick="generateAI()">✨ <span id="aiBtnText">Generate Insights</span></button>
+        </div>
+      </div>
+      <div class="ai-body" id="aiBody">
+        <div class="ai-placeholder">
+          <div class="icon">🤖</div>
+          <div id="aiPlaceholderText">Click "Generate Insights" to get AI-powered analysis of your spending</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /#dashContent -->
+</main>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

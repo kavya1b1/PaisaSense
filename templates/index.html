@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PaisaSense AI — Smart Financial Insights</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" />
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">PaisaSense AI</div>
+  <div class="nav-tag">Financial Behavior Intelligence</div>
+  <span class="badge">BETA</span>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      AI-Powered · Free · Private
+    </div>
+    <h1>
+      Understand your<br/>
+      <span class="gradient">money habits.</span><br/>
+      Fix them.
+    </h1>
+    <p class="hero-sub">
+      Upload your transaction CSV or PDF bank statement and get instant behavioral analysis,
+      spending insights, and actionable AI recommendations — no login required.
+    </p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink-soft);">
+        <span style="color:var(--green);font-size:1rem;">✓</span> 100% private
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink-soft);">
+        <span style="color:var(--green);font-size:1rem;">✓</span> No signup
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink-soft);">
+        <span style="color:var(--green);font-size:1rem;">✓</span> CSV &amp; PDF
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload Card -->
+  <div class="upload-card">
+    <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;margin-bottom:6px;">
+      Analyze Your Finances
+    </h3>
+    <p style="font-size:.85rem;color:var(--ink-soft);margin-bottom:24px;">
+      Upload a CSV or PDF, or try our demo data instantly
+    </p>
+
+    <div class="upload-zone" id="dropZone">
+      <input type="file" id="fileInput" accept=".csv,.pdf" />
+      <div class="upload-icon">📊</div>
+      <h3>Drop your file here</h3>
+      <p>or click to browse</p>
+      <p class="file-types">✅ CSV &nbsp;·&nbsp; ✅ PDF bank statements</p>
+    </div>
+
+    <div class="selected-file" id="selectedFile">
+      <span id="fileTypeIcon">📄</span>
+      <span id="selectedFileName"></span>
+    </div>
+
+    <div class="error-msg" id="errorMsg">
+      <span>⚠️</span>
+      <span id="errorText"></span>
+    </div>
+
+    <div style="margin-top:16px;display:flex;flex-direction:column;gap:10px;">
+      <button class="btn btn-primary" id="analyzeBtn" onclick="analyzeFile()">
+        <span>🔍</span> Analyze My Spending
+      </button>
+      <div class="divider">or</div>
+      <button class="btn btn-secondary" onclick="useDemo()">
+        <span>⚡</span> Use Demo Data
+      </button>
+    </div>
+
+    <a href="/demo-csv" style="display:block;text-align:center;margin-top:14px;font-size:.78rem;color:var(--accent);text-decoration:none;">
+      ↓ Download sample CSV
+    </a>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+  <div style="text-align:center;margin-bottom:16px;">
+    <div class="section-label">What you get</div>
+    <div class="section-title">Your complete money picture</div>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📤</div>
+      <h4>CSV &amp; PDF Upload</h4>
+      <p>Upload bank statement PDFs or CSV exports — both work seamlessly.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <h4>Spending Breakdown</h4>
+      <p>Category-wise analysis of Food, Travel, Shopping, Bills &amp; more.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <h4>Behavioral Patterns</h4>
+      <p>Detect weekend overspend, impulse buys, and hidden money drains.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚠️</div>
+      <h4>Risk Alerts</h4>
+      <p>Get warned before your balance drops critically based on your burn rate.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🤖</div>
+      <h4>AI in Hindi &amp; English</h4>
+      <p>Natural language insights powered by Gemini AI — in your preferred language.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔒</div>
+      <h4>Fully Private</h4>
+      <p>Your data stays local — nothing is stored or shared with anyone.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  PaisaSense AI · Built for India's digital-first generation · No data stored
+</footer>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">Analyzing your finances...</div>
+  <div class="loading-sub"  id="loadingSub">Crunching numbers with AI magic ✨</div>
+</div>
+
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</body>
+</html>
